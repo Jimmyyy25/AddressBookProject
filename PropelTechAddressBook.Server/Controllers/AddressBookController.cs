@@ -12,11 +12,11 @@ public class AddressBookController(IAddressBookService addressBookService,
     private readonly ILogger<AddressBookController> _logger = logger;
 
     [HttpGet("[action]")]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
         try
         {
-            IEnumerable<AddressBookLine> lines = addressBookService.GetAll();
+            IEnumerable<AddressBookLine> lines = await addressBookService.GetAllAsync();
             return Ok(new { isSuccess = true, payload = lines });
         }
         catch (Exception ex)
@@ -26,11 +26,11 @@ public class AddressBookController(IAddressBookService addressBookService,
     }
 
     [HttpGet("[action]")]
-    public IActionResult GetByEmail(string email)
+    public async Task<IActionResult> GetByEmail(string email)
     {
         try
         {
-            AddressBookLine? line = addressBookService.GetByEmail(email);
+            AddressBookLine? line = await addressBookService.GetByEmailAsync(email);
             
             if (line == null)
                 return NotFound(new { isSuccess = false, message = $"Contact not found: {email}" });
@@ -44,11 +44,11 @@ public class AddressBookController(IAddressBookService addressBookService,
     }
 
     [HttpPut("[action]")]
-    public IActionResult Update([FromBody] AddressBookLine updatedEntry)
+    public async Task<IActionResult> Update([FromBody] AddressBookLine updatedEntry)
     {
         try
         {
-            AddressBookLine line = addressBookService.Update(updatedEntry);
+            AddressBookLine line = await addressBookService.UpdateAsync(updatedEntry);
             return Ok(new { isSuccess = true, payload = line });
         }
         catch (Exception ex)
@@ -58,11 +58,11 @@ public class AddressBookController(IAddressBookService addressBookService,
     }
 
     [HttpPost("[action]")]
-    public IActionResult Create([FromBody] AddressBookLine newEntry)
+    public async Task<IActionResult> Create([FromBody] AddressBookLine newEntry)
     {
         try
         {
-            AddressBookLine line = addressBookService.Create(newEntry);
+            AddressBookLine line = await addressBookService.CreateAsync(newEntry);
             return Ok(new { isSuccess = true, payload = line });
         }
         catch (Exception ex)
@@ -72,11 +72,11 @@ public class AddressBookController(IAddressBookService addressBookService,
     }
 
     [HttpDelete("[action]")]
-    public IActionResult Delete(string email)
+    public async Task<IActionResult> Delete(string email)
     {
         try
         {
-            addressBookService.Delete(email);
+            await addressBookService.DeleteAsync(email);
             return Ok(new { isSuccess = true, message = $"Contact deleted: {email}" });
         }
         catch (Exception ex)
@@ -87,11 +87,13 @@ public class AddressBookController(IAddressBookService addressBookService,
 
     private IActionResult HandleException(Exception ex)
     {
-        if (ex is FileNotFoundException)
-            return NotFound(new { isSuccess = false, message = ex.Message });
+        if (ex is FileNotFoundException || ex is KeyNotFoundException)
+            return NotFound(new { isSuccess = false, message = ex.Message }); // 404
+        else if (ex is ArgumentException || ex is InvalidOperationException || ex is FormatException)
+            return BadRequest(new { isSuccess = false, message = ex.Message }); // 400 
 
+        // if we reach here - unexpected error on our part - log and return generic message
         _logger.LogError(ex, "Unhandled exception");
-
         return StatusCode(500, new { isSuccess = false, message = "Unexpected server error." });
     }
 }

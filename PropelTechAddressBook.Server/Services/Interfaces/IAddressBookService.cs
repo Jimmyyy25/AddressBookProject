@@ -4,10 +4,10 @@ namespace PropelTechAddressBook.Server.Services.Interfaces
 {
     public interface IAddressBookService
     {
-        IEnumerable<AddressBookLine> GetAll();
-        AddressBookLine? GetByEmail(string email);
-        AddressBookLine Update(AddressBookLine addressBookLine);
-        AddressBookLine Create(AddressBookLine addressBookLine);
-        void Delete(string email);
+        Task<IEnumerable<AddressBookLine>> GetAllAsync();
+        Task<AddressBookLine?> GetByEmailAsync(string email);
+        Task<AddressBookLine> UpdateAsync(AddressBookLine addressBookLine);
+        Task<AddressBookLine> CreateAsync(AddressBookLine addressBookLine);
+        Task DeleteAsync(string email);
     }
 }
