@@ -2,7 +2,7 @@
 
 namespace PropelTechAddressBook.Server.Models;
 
-public class AddressBookLine
+public record AddressBookLine
 {
     [JsonPropertyName("first_name")]
     public required string FirstName { get; set; }
