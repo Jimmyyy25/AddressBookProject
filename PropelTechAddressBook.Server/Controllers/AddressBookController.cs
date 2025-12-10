@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PropelTechAddressBook.Server.Core;
 using PropelTechAddressBook.Server.Models;
 using PropelTechAddressBook.Server.Services.Interfaces;
 
@@ -30,6 +31,8 @@ public class AddressBookController(IAddressBookService addressBookService,
     {
         try
         {
+            Utils.ValidateEmail(email);
+
             AddressBookLine? line = await addressBookService.GetByEmailAsync(email);
             
             if (line == null)
@@ -46,6 +49,9 @@ public class AddressBookController(IAddressBookService addressBookService,
     [HttpPut("[action]")]
     public async Task<IActionResult> Update([FromBody] AddressBookLine updatedEntry)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
         try
         {
             AddressBookLine line = await addressBookService.UpdateAsync(updatedEntry);
@@ -60,6 +66,9 @@ public class AddressBookController(IAddressBookService addressBookService,
     [HttpPost("[action]")]
     public async Task<IActionResult> Create([FromBody] AddressBookLine newEntry)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
         try
         {
             AddressBookLine line = await addressBookService.CreateAsync(newEntry);
@@ -76,6 +85,8 @@ public class AddressBookController(IAddressBookService addressBookService,
     {
         try
         {
+            Utils.ValidateEmail(email);
+
             await addressBookService.DeleteAsync(email);
             return Ok(new { isSuccess = true, message = $"Contact deleted: {email}" });
         }

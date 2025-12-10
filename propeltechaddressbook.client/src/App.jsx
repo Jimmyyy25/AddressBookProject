@@ -17,6 +17,19 @@ function App() {
     }, []);
 
     // Event handlers
+    const formRef = useRef();
+
+    const [form, setForm] = useState({
+        first_name: "",
+        last_name: "",
+        phone: "",
+        email: ""
+    });
+
+    useEffect(() => {
+        if (editingEntry) setForm(editingEntry);
+    }, [editingEntry]);
+
     async function onEditClick(email) {
 
         console.log("onEditClick()", email);
@@ -51,11 +64,24 @@ function App() {
         return;
     }
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(formRef.current);
+        const json = Object.fromEntries(formData.entries());
+
+        updateAddressBookLine(json);
+
+        
+    };
+
     // Event handlers end
 
     console.log("addressBook", addressBook);
 
     const tableRef = useRef(null);
+    const modalRef = useRef(null);
+    const closeModalRef = useRef(null);
 
     // could use jquery datatables for searching and sorting
     //tableRef = new DataTable('#addressBookTable');
@@ -68,11 +94,11 @@ function App() {
 
             {
                 (!message && !addressBook)
-                    ?
+                ?
                     <p><em>Loading address book. Please wait...</em></p>
-                    :
+                :
                     addressBook
-                        ?
+                    ?
                         <div className="mx-auto mb-3 d-flex flex-column">
                             <table ref={tableRef} id="addressBookTable" className="table table-striped" aria-labelledby="tableLabel">
                                 <thead>
@@ -94,7 +120,7 @@ function App() {
                                                 <td>{line.phone}</td>
                                                 <td>{line.email}</td>
                                                 <td>
-                                                    <button type="button" className="btn btn-sm btn-secondary me-2" onClick={() => onEditClick(line.email)}>Edit</button>
+                                                    <button type="button" data-bs-toggle="modal" data-bs-target="#ABLineModal" className="btn btn-sm btn-secondary me-2" onClick={() => onEditClick(line.email)}>Edit</button>
                                                     <button type="button" className="btn btn-sm btn-danger" onClick={() => onDeleteClick(line.email)}>Delete</button>
                                                 </td>
                                             </tr>
@@ -102,19 +128,69 @@ function App() {
                                     }
                                 </tbody>
                             </table>
-                            <button type="button" className="btn btn-sm btn-success ms-auto" onClick={onCreateClick}>Add</button>
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#ABLineModal" className="btn btn-sm btn-success ms-auto" onClick={onCreateClick}>Add</button>
                         </div>
-                        :
+                    :
                         <p><em>{message}</em></p>
             }
 
             {
-                showModal
+                message
                 &&
-                    <ABLineModal title="Edit Contact" model={editingEntry} onClose={() => setShowModal(false)} onSave={handleSave}>
-                        
-                   </ABLineModal>
+                <p className="text-secondary">{message}</p>
             }
+
+            <div className="modal fade" id="ABLineModal" tabIndex="-1" aria-hidden="true" ref={modalRef}>
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
+
+                        <div className="modal-header">
+                            <h5 className="modal-title">Edit Line</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" ref={closeModalRef}></button>
+                        </div>
+
+                        <div className="modal-body text-start">
+
+                            <form ref={formRef} onSubmit={handleSubmit}>
+
+                                <div className="mb-3">
+                                    <label className="form-label">First Name</label>
+                                    <input type="text" name="first_name" className="form-control" value={form.first_name} onChange={(e) => setForm({ ...form, first_name: e.target.value })} />
+                                </div>
+
+                                <div className="mb-3">
+                                    <label className="form-label">Last Name</label>
+                                    <input type="text" name="last_name" className="form-control" value={form.last_name} onChange={(e) => setForm({ ...form, last_name: e.target.value })} />
+                                </div>
+
+                                <div className="mb-3">
+                                    <label className="form-label">Phone</label>
+                                    <input type="text" name="phone" className="form-control" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+                                </div>
+
+                                <div className="mb-3">
+                                    <label className="form-label">Email</label>
+                                    <input type="email" name="email" className="form-control" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+                                </div>
+
+                                <div className="d-flex justify-content-end">
+
+                                    <button type="button" className="btn btn-secondary me-2" data-bs-dismiss="modal">
+                                        Cancel
+                                    </button>
+
+                                    <button type="submit" className="btn btn-primary">
+                                        Save Changes
+                                    </button>
+
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </>
     );
@@ -147,7 +223,7 @@ function App() {
 
             const data = await response.json();
 
-            console.log("populateAddressBook data ", data);
+            console.log("getAddressBookLine data ", data);
 
 
             if (data.isSuccess)
@@ -157,30 +233,57 @@ function App() {
         }
     }
 
-    async function handleSave(object) {
+    //async function handleSave(object) {
 
-        const jsonObject = JSON.stringify(object);
+    //    const jsonObject = JSON.stringify(object);
 
-        const response = await fetch(`${apiBaseUrl}/AddressBook/Create`, {
-            method: "DELETE",
-            body: jsonObject,
-            headers: {
-                "Content-Type": "application/json"
-            }
+    //    const response = await fetch(`${apiBaseUrl}/AddressBook/Create`, {
+    //        method: "POST",
+    //        body: jsonObject,
+    //        headers: {
+    //            "Content-Type": "application/json"
+    //        }
+    //    });
+
+    //    if (response.ok) {
+
+    //        const data = await response.json();
+
+
+    //        console.log("handleSave data ", data);
+
+    //        if (data.isSuccess) {
+    //            // could/should show toast
+    //            // e.g. setToast(data.message);
+
+    //            populateAddressBook();
+    //        }
+    //        else {
+    //            setMessage(data.message)
+    //        }
+    //    }
+    //}
+
+    async function updateAddressBookLine(json) {
+
+        const response = await fetch(`${apiBaseUrl}/AddressBook/Update`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(json)
         });
 
         if (response.ok) {
 
             const data = await response.json();
 
-
-            console.log("deleteAddressBookLine data ", data);
+            console.log("updateAddressBookLine data ", data);
 
             if (data.isSuccess) {
                 // could/should show toast
                 // e.g. setToast(data.message);
 
                 populateAddressBook();
+                closeModalRef.current.click();
             }
             else {
                 setMessage(data.message)

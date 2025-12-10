@@ -25,8 +25,6 @@ public class AddressBookService(IOptions<Configuration> config) : IAddressBookSe
 
     public async Task<AddressBookLine?> GetByEmailAsync(string email)
     {
-        Utils.ValidateEmail(email);
-
         // Always work on fresh read of file to avoid stale data issues
         string fileContents = await Utils.ReadFileContents(AddressBookFilePath);
 
@@ -43,8 +41,6 @@ public class AddressBookService(IOptions<Configuration> config) : IAddressBookSe
 
     public async Task<AddressBookLine> UpdateAsync(AddressBookLine addressBookLine)
     {
-        Utils.ValidateEmail(addressBookLine.Email);
-
         // Always work on fresh read of file to avoid stale data issues
         string fileContents = await Utils.ReadFileContents(AddressBookFilePath);
 
@@ -69,8 +65,6 @@ public class AddressBookService(IOptions<Configuration> config) : IAddressBookSe
 
     public async Task<AddressBookLine> CreateAsync(AddressBookLine addressBookLine)
     {
-        Utils.ValidateEmail(addressBookLine.Email);
-
         // Always work on fresh read of file to avoid stale data issues
         string fileContents = await Utils.ReadFileContents(AddressBookFilePath);
 
@@ -90,8 +84,6 @@ public class AddressBookService(IOptions<Configuration> config) : IAddressBookSe
 
     public async Task DeleteAsync(string email)
     {
-        Utils.ValidateEmail(email);
-
         // Always work on fresh read of file to avoid stale data issues
         string fileContents = await Utils.ReadFileContents(AddressBookFilePath);
 
