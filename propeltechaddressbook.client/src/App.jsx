@@ -19,6 +19,13 @@ function App() {
     // Event handlers
     const formRef = useRef();
 
+    const emptyForm = {
+        first_name: "",
+        last_name: "",
+        phone: "",
+        email: ""
+    };
+
     const [form, setForm] = useState({
         first_name: "",
         last_name: "",
@@ -27,7 +34,10 @@ function App() {
     });
 
     useEffect(() => {
-        if (editingEntry) setForm(editingEntry);
+        if (editingEntry)
+            setForm(editingEntry);
+        else
+            setForm(emptyForm);
     }, [editingEntry]);
 
     async function onEditClick(email) {
@@ -70,9 +80,10 @@ function App() {
         const formData = new FormData(formRef.current);
         const json = Object.fromEntries(formData.entries());
 
-        updateAddressBookLine(json);
-
-        
+        if (editingEntry)
+            updateAddressBookLine(json);
+        else
+            createAddressBookLine(json);
     };
 
     // Event handlers end
@@ -145,7 +156,7 @@ function App() {
                     <div className="modal-content">
 
                         <div className="modal-header">
-                            <h5 className="modal-title">Edit Line</h5>
+                            <h5 className="modal-title">{editingEntry ? "Edit Line" : "Add Line"}</h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" ref={closeModalRef}></button>
                         </div>
 
@@ -155,22 +166,22 @@ function App() {
 
                                 <div className="mb-3">
                                     <label className="form-label">First Name</label>
-                                    <input type="text" name="first_name" className="form-control" value={form.first_name} onChange={(e) => setForm({ ...form, first_name: e.target.value })} />
+                                    <input type="text" name="first_name" className="form-control" value={form.first_name ?? ""} onChange={(e) => setForm({ ...form, first_name: e.target.value })} />
                                 </div>
 
                                 <div className="mb-3">
                                     <label className="form-label">Last Name</label>
-                                    <input type="text" name="last_name" className="form-control" value={form.last_name} onChange={(e) => setForm({ ...form, last_name: e.target.value })} />
+                                    <input type="text" name="last_name" className="form-control" value={form.last_name ?? ""} onChange={(e) => setForm({ ...form, last_name: e.target.value })} />
                                 </div>
 
                                 <div className="mb-3">
                                     <label className="form-label">Phone</label>
-                                    <input type="text" name="phone" className="form-control" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+                                    <input type="text" name="phone" className="form-control" value={form.phone ?? ""} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
                                 </div>
 
                                 <div className="mb-3">
                                     <label className="form-label">Email</label>
-                                    <input type="email" name="email" className="form-control" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+                                    <input type="email" name="email" className="form-control" value={form.email ?? ""} onChange={(e) => setForm({ ...form, email: e.target.value })} />
                                 </div>
 
                                 <div className="d-flex justify-content-end">
@@ -184,6 +195,8 @@ function App() {
                                     </button>
 
                                 </div>
+
+                                <p><em>{message}</em></p>
 
                             </form>
 
@@ -263,6 +276,33 @@ function App() {
     //        }
     //    }
     //}
+
+    async function createAddressBookLine(json) {
+
+        const response = await fetch(`${apiBaseUrl}/AddressBook/Create`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(json)
+        });
+
+        if (response.ok) {
+
+            const data = await response.json();
+
+            console.log("createAddressBookLine data ", data);
+
+            if (data.isSuccess) {
+                // could/should show toast
+                // e.g. setToast(data.message);
+
+                populateAddressBook();
+                closeModalRef.current.click();
+            }
+            else {
+                setMessage(data.message)
+            }
+        }
+    }
 
     async function updateAddressBookLine(json) {
 
