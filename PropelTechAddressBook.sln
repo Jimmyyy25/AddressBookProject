@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{02EA681E-C
 		ExampleJSON.txt = ExampleJSON.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropelTechAddressBook.Tests", "PropelTechAddressBook.Tests\PropelTechAddressBook.Tests.csproj", "{D3FEB51B-6D76-4829-BD54-C360D1503968}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,10 @@ Global
 		{F4C6688C-ABF2-4F9C-A4C4-9AA2E2C5AB4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4C6688C-ABF2-4F9C-A4C4-9AA2E2C5AB4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4C6688C-ABF2-4F9C-A4C4-9AA2E2C5AB4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3FEB51B-6D76-4829-BD54-C360D1503968}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3FEB51B-6D76-4829-BD54-C360D1503968}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3FEB51B-6D76-4829-BD54-C360D1503968}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3FEB51B-6D76-4829-BD54-C360D1503968}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
