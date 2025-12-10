@@ -71,7 +71,7 @@ public class AddressBookController(IAddressBookService addressBookService,
         }
     }
 
-    [HttpDelete("[action]")]
+    [HttpDelete("[action]/{email}")]
     public async Task<IActionResult> Delete(string email)
     {
         try

@@ -56,7 +56,6 @@ function App() {
     console.log("addressBook", addressBook);
 
     const tableRef = useRef(null);
-    const modalRef = useRef();
 
     // could use jquery datatables for searching and sorting
     //tableRef = new DataTable('#addressBookTable');
@@ -112,7 +111,7 @@ function App() {
             {
                 showModal
                 &&
-                    <ABLineModal ref={modalRef} title="Edit Contact" model={editingEntry} onClose={() => setShowModal(false)} onSave={handleSave}>
+                    <ABLineModal title="Edit Contact" model={editingEntry} onClose={() => setShowModal(false)} onSave={handleSave}>
                         
                    </ABLineModal>
             }
@@ -160,10 +159,14 @@ function App() {
 
     async function handleSave(object) {
 
-        const encodedEmail = encodeURIComponent(email);
+        const jsonObject = JSON.stringify(object);
 
-        const response = await fetch(`${apiBaseUrl}/AddressBook/Delete?email=${encodedEmail}`, {
-            method: "DELETE"
+        const response = await fetch(`${apiBaseUrl}/AddressBook/Create`, {
+            method: "DELETE",
+            body: jsonObject,
+            headers: {
+                "Content-Type": "application/json"
+            }
         });
 
         if (response.ok) {
@@ -189,7 +192,7 @@ function App() {
 
         const encodedEmail = encodeURIComponent(email);
 
-        const response = await fetch(`${apiBaseUrl}/AddressBook/Delete?email=${encodedEmail}`, {
+        const response = await fetch(`${apiBaseUrl}/AddressBook/Delete/${encodedEmail}`, {
             method: "DELETE"
         });
 
