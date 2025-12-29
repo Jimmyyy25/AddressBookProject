@@ -1,12 +1,12 @@
 ﻿using System.Text.Json;
 using Microsoft.Extensions.Options;
-using PropelTechAddressBook.Server.Models;
-using PropelTechAddressBook.Server.Services;
+using AddressBookProject.Server.Models;
+using AddressBookProject.Server.Services;
 using Xunit;
 //using Moq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using PropelTechAddressBook.Server.Core;
+using AddressBookProject.Server.Core;
 
 public class AddressBookServiceTests
 {
@@ -41,7 +41,7 @@ public class AddressBookServiceTests
 
     //    using (ShimsContext.Create())
     //    {
-    //        PropelTechAddressBook.Server.Core.Fakes.ShimUtils.ReadFileContentsString = _ => Task.FromResult(json);
+    //        AddressBookProject.Server.Core.Fakes.ShimUtils.ReadFileContentsString = _ => Task.FromResult(json);
 
     //        var service = CreateService();
     //        var result = await service.GetAllAsync();
@@ -59,8 +59,8 @@ public class AddressBookServiceTests
 
     //    using (ShimsContext.Create())
     //    {
-    //        PropelTechAddressBook.Server.Core.Fakes.ShimUtils.ValidateEmailString = _ => { };
-    //        PropelTechAddressBook.Server.Core.Fakes.ShimUtils.ReadFileContentsString = _ => Task.FromResult(json);
+    //        AddressBookProject.Server.Core.Fakes.ShimUtils.ValidateEmailString = _ => { };
+    //        AddressBookProject.Server.Core.Fakes.ShimUtils.ReadFileContentsString = _ => Task.FromResult(json);
 
     //        var service = CreateService();
     //        var result = await service.GetByEmailAsync("john@doe.com");
@@ -78,9 +78,9 @@ public class AddressBookServiceTests
 
     //    using (ShimsContext.Create())
     //    {
-    //        PropelTechAddressBook.Server.Core.Fakes.ShimUtils.ValidateEmailString = _ => { };
-    //        PropelTechAddressBook.Server.Core.Fakes.ShimUtils.ReadFileContentsString = _ => Task.FromResult(json);
-    //        PropelTechAddressBook.Server.Core.Fakes.ShimUtils.WriteFileContentsStringIEnumerableOfAddressBookLine = (_, _) => Task.CompletedTask;
+    //        AddressBookProject.Server.Core.Fakes.ShimUtils.ValidateEmailString = _ => { };
+    //        AddressBookProject.Server.Core.Fakes.ShimUtils.ReadFileContentsString = _ => Task.FromResult(json);
+    //        AddressBookProject.Server.Core.Fakes.ShimUtils.WriteFileContentsStringIEnumerableOfAddressBookLine = (_, _) => Task.CompletedTask;
 
     //        var service = CreateService();
     //        var updatedLine = GetSampleLine();
@@ -100,9 +100,9 @@ public class AddressBookServiceTests
 
     //    using (ShimsContext.Create())
     //    {
-    //        PropelTechAddressBook.Server.Core.Fakes.ShimUtils.ValidateEmailString = _ => { };
-    //        PropelTechAddressBook.Server.Core.Fakes.ShimUtils.ReadFileContentsString = _ => Task.FromResult(json);
-    //        PropelTechAddressBook.Server.Core.Fakes.ShimUtils.WriteFileContentsStringIEnumerableOfAddressBookLine = (_, _) => Task.CompletedTask;
+    //        AddressBookProject.Server.Core.Fakes.ShimUtils.ValidateEmailString = _ => { };
+    //        AddressBookProject.Server.Core.Fakes.ShimUtils.ReadFileContentsString = _ => Task.FromResult(json);
+    //        AddressBookProject.Server.Core.Fakes.ShimUtils.WriteFileContentsStringIEnumerableOfAddressBookLine = (_, _) => Task.CompletedTask;
 
     //        var service = CreateService();
     //        var newLine = GetSampleLine();
@@ -121,9 +121,9 @@ public class AddressBookServiceTests
 
     //    using (ShimsContext.Create())
     //    {
-    //        PropelTechAddressBook.Server.Core.Fakes.ShimUtils.ValidateEmailString = _ => { };
-    //        PropelTechAddressBook.Server.Core.Fakes.ShimUtils.ReadFileContentsString = _ => Task.FromResult(json);
-    //        PropelTechAddressBook.Server.Core.Fakes.ShimUtils.WriteFileContentsStringIEnumerableOfAddressBookLine = (_, _) => Task.CompletedTask;
+    //        AddressBookProject.Server.Core.Fakes.ShimUtils.ValidateEmailString = _ => { };
+    //        AddressBookProject.Server.Core.Fakes.ShimUtils.ReadFileContentsString = _ => Task.FromResult(json);
+    //        AddressBookProject.Server.Core.Fakes.ShimUtils.WriteFileContentsStringIEnumerableOfAddressBookLine = (_, _) => Task.CompletedTask;
 
     //        var service = CreateService();
     //        await service.DeleteAsync("john@doe.com");

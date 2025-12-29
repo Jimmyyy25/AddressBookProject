@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Options;
-using PropelTechAddressBook.Server.Core;
-using PropelTechAddressBook.Server.Models;
-using PropelTechAddressBook.Server.Services.Interfaces;
+using AddressBookProject.Server.Core;
+using AddressBookProject.Server.Models;
+using AddressBookProject.Server.Services.Interfaces;
 using System.Text.Json;
 
-namespace PropelTechAddressBook.Server.Services;
+namespace AddressBookProject.Server.Services;
 
 public class AddressBookService(IOptions<Configuration> config) : IAddressBookService
 {

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace PropelTechAddressBook.Server.Models;
+namespace AddressBookProject.Server.Models;
 
 // TODO: Create DTOs CreateAddressBookRequest, UpdateAddressBookRequest
 // TODO: Seen FluentValidation which looks good, could use this

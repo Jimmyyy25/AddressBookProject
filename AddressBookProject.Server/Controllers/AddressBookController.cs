@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PropelTechAddressBook.Server.Core;
-using PropelTechAddressBook.Server.Models;
-using PropelTechAddressBook.Server.Services.Interfaces;
+using AddressBookProject.Server.Core;
+using AddressBookProject.Server.Models;
+using AddressBookProject.Server.Services.Interfaces;
 
-namespace PropelTechAddressBook.Server.Controllers;
+namespace AddressBookProject.Server.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

@@ -1,6 +1,6 @@
-using PropelTechAddressBook.Server.Core;
-using PropelTechAddressBook.Server.Services;
-using PropelTechAddressBook.Server.Services.Interfaces;
+using AddressBookProject.Server.Core;
+using AddressBookProject.Server.Services;
+using AddressBookProject.Server.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

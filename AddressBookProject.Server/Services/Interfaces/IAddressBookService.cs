@@ -1,6 +1,6 @@
-﻿using PropelTechAddressBook.Server.Models;
+﻿using AddressBookProject.Server.Models;
 
-namespace PropelTechAddressBook.Server.Services.Interfaces
+namespace AddressBookProject.Server.Services.Interfaces
 {
     public interface IAddressBookService
     {

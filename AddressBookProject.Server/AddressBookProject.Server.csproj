@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\propeltechaddressbook.client\propeltechaddressbook.client.esproj">
+    <ProjectReference Include="..\propeltechaddressbook.client\addressbookproject.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>

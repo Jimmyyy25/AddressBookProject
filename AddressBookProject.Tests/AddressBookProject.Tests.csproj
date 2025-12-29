@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PropelTechAddressBook.Server\PropelTechAddressBook.Server.csproj" />
+    <ProjectReference Include="..\AddressBookProject.Server\AddressBookProject.Server.csproj" />
   </ItemGroup>
 
   <ItemGroup>

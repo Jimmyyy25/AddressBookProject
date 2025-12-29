@@ -47,6 +47,7 @@ function App() {
         const line = await getAddressBookLine(email);
 
         setEditingEntry(line);
+        setMessage(null);
         setShowModal(true);
 
         return;
@@ -58,6 +59,7 @@ function App() {
         console.log("onCreateClick()");
 
         setEditingEntry(null); // means new record
+        setMessage(null);
         setShowModal(true);
 
         return;
@@ -145,12 +147,6 @@ function App() {
                         <p><em>{message}</em></p>
             }
 
-            {
-                message
-                &&
-                <p className="text-secondary">{message}</p>
-            }
-
             <div className="modal fade" id="ABLineModal" tabIndex="-1" aria-hidden="true" ref={modalRef}>
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
@@ -190,15 +186,15 @@ function App() {
                                         Cancel
                                     </button>
 
-                                    <button type="submit" className="btn btn-primary">
+                                    <button type="submit" className="btn btn-success">
                                         Save Changes
                                     </button>
 
                                 </div>
 
-                                <p><em>{message}</em></p>
-
                             </form>
+
+                            <p className="mt-3 text-danger">{message}</p>
 
                         </div>
                     </div>
@@ -210,19 +206,13 @@ function App() {
 
     async function populateAddressBook() {
 
-        const response = await fetch(`${apiBaseUrl}/AddressBook/GetAll`);
+        try {
+            const responseData = await fetch(`${apiBaseUrl}/AddressBook/GetAll`);
 
-        if (response.ok) {
-
-            const data = await response.json();
-
-            console.log("populateAddressBook data ", data);
-
-
-            if (data.isSuccess)
-                setAddressBook(data.payload);
-            else
-                setMessage(data.message)
+            setAddressBook(responseData.payload);
+        }
+        catch (err) {
+            setMessage(err.message)
         }
     }
 
@@ -230,19 +220,12 @@ function App() {
 
         const encodedEmail = encodeURIComponent(email);
 
-        const response = await fetch(`${apiBaseUrl}/AddressBook/GetByEmail?email=${encodedEmail}`);
-
-        if (response.ok) {
-
-            const data = await response.json();
-
-            console.log("getAddressBookLine data ", data);
-
-
-            if (data.isSuccess)
-                return data.payload;
-            else
-                setMessage(data.message)
+        try {
+            const responseData = await fetch(`${apiBaseUrl}/AddressBook/GetByEmail?email=${encodedEmail}`);
+            return responseData.payload;
+        }
+        catch (err) {
+            setMessage(err.message)
         }
     }
 
@@ -279,55 +262,42 @@ function App() {
 
     async function createAddressBookLine(json) {
 
-        const response = await fetch(`${apiBaseUrl}/AddressBook/Create`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(json)
-        });
+        try {
+            const responseData = await apiFetch(`${apiBaseUrl}/AddressBook/Create`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(json)
+            });
 
-        if (response.ok) {
+            // could/should show toast
+            // e.g. setToast(data.message);
 
-            const data = await response.json();
-
-            console.log("createAddressBookLine data ", data);
-
-            if (data.isSuccess) {
-                // could/should show toast
-                // e.g. setToast(data.message);
-
-                populateAddressBook();
-                closeModalRef.current.click();
-            }
-            else {
-                setMessage(data.message)
-            }
+            populateAddressBook();
+            closeModalRef.current.click();
         }
+        catch (err) {
+            setMessage(err.message)
+        }
+
     }
 
     async function updateAddressBookLine(json) {
 
-        const response = await fetch(`${apiBaseUrl}/AddressBook/Update`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(json)
-        });
+        try {
+            const response = await apiFetch(`${apiBaseUrl}/AddressBook/Update`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(json)
+            });
 
-        if (response.ok) {
+            // could/should show toast
+            // e.g. setToast(data.message);
 
-            const data = await response.json();
-
-            console.log("updateAddressBookLine data ", data);
-
-            if (data.isSuccess) {
-                // could/should show toast
-                // e.g. setToast(data.message);
-
-                populateAddressBook();
-                closeModalRef.current.click();
-            }
-            else {
-                setMessage(data.message)
-            }
+            populateAddressBook();
+            closeModalRef.current.click();
+        }
+        catch (err) {
+            setMessage(err.message)
         }
     }
 
@@ -335,27 +305,37 @@ function App() {
 
         const encodedEmail = encodeURIComponent(email);
 
-        const response = await fetch(`${apiBaseUrl}/AddressBook/Delete/${encodedEmail}`, {
-            method: "DELETE"
-        });
+        try {
+            const response = await fetch(`${apiBaseUrl}/AddressBook/Delete/${encodedEmail}`, {
+                method: "DELETE"
+            });
 
-        if (response.ok) {
-
-            const data = await response.json();
-            
-
-            console.log("deleteAddressBookLine data ", data);
-
-            if (data.isSuccess) {
-                // could/should show toast
-                // e.g. setToast(data.message);
-
-                populateAddressBook();
-            }
-            else {
-                setMessage(data.message)
-            }
+            // could/should show toast
+            // e.g. setToast(data.message);
+            populateAddressBook();
         }
+        catch (err) {
+            setMessage(err.message)
+        }
+    }
+
+    async function apiFetch(url, options = {}) {
+
+        const response = await fetch(url, options);
+
+        let data;
+
+        try {
+            data = await response.json();
+        } catch {
+            throw new Error("Invalid JSON response from server.");
+        }
+
+        if (!response.ok) {
+            throw new Error(data.message || "Unexpected server error.");
+        }
+
+        return data;
     }
 }
 

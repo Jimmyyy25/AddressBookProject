@@ -1,4 +1,4 @@
-﻿namespace PropelTechAddressBook.Server.Core;
+﻿namespace AddressBookProject.Server.Core;
 
 public class Configuration
 {
