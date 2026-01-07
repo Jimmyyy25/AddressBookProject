@@ -5,15 +5,19 @@ using AddressBookProject.Server.Services.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 // CORS so React dev server can call API
+var allowedOrigins = builder.Configuration
+    .GetSection("Cors:AllowedOrigins")
+    .Get<string[]>();
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactDev", //"AllowAll"
-        policy =>
-        {
-            policy.WithOrigins("https://localhost:52752") // React dev server URL
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
+    options.AddPolicy("DefaultCors", policy =>
+    {
+        policy
+            .WithOrigins(allowedOrigins ?? [])
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
 });
 
 // Add services to the container.
@@ -46,10 +50,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
 // Enable CORS
-app.UseCors("AllowReactDev");
+app.UseCors("DefaultCors");
+
+app.UseAuthorization();
 
 app.MapControllers();
 
