@@ -6,7 +6,7 @@ using System.Text.Json;
 
 namespace AddressBookProject.Server.Services;
 
-public class AddressBookService(IOptions<Configuration> config) : IAddressBookService
+public class AddressBookService(IOptions<Configuration> config, BlobStorageService blobStorageService) : IAddressBookService
 {
     private readonly Configuration _config = config.Value;
 
@@ -15,10 +15,16 @@ public class AddressBookService(IOptions<Configuration> config) : IAddressBookSe
     // implement interface methods here
     public async Task<IEnumerable<AddressBookLine>> GetAllAsync()
     {
-        string fileContents = await Utils.ReadFileContents(AddressBookFilePath);
+        //string fileContents = await Utils.ReadFileContents(AddressBookFilePath);
+
+        var json = await blobStorageService.ReadAsync();
+        // deserialize, modify, reserialize
+        //await blobStorageService.WriteAsync(updatedJson);
+
 
         // Deserialize data to ensure it's valid JSON and matches expected structure
-        var lines = JsonSerializer.Deserialize<List<AddressBookLine>>(fileContents) ?? [];
+        //var lines = JsonSerializer.Deserialize<List<AddressBookLine>>(fileContents) ?? [];
+        var lines = JsonSerializer.Deserialize<List<AddressBookLine>>(json) ?? [];
 
         return lines;
     }

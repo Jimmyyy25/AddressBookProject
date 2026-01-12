@@ -36,6 +36,11 @@ builder.Services.AddTransient<IAddressBookService, AddressBookService>();
 builder.Services.Configure<Configuration>(
     builder.Configuration.GetSection("Configuration"));
 
+builder.Services.Configure<AzureStorageOptions>(
+    builder.Configuration.GetSection("AzureStorage"));
+
+builder.Services.AddSingleton<BlobStorageService>();
+
 var app = builder.Build();
 
 app.UseDefaultFiles();
