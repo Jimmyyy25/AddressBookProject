@@ -2,6 +2,7 @@
 using AddressBookProject.Server.Core;
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.Options;
+using System.Text.Json;
 
 namespace AddressBookProject.Server.Services
 {
@@ -26,9 +27,17 @@ namespace AddressBookProject.Server.Services
 
         public async Task<string> ReadAsync()
         {
-            var blob = _container.GetBlobClient(_blobName);
-            var response = await blob.DownloadContentAsync();
-            return response.Value.Content.ToString();
+            try
+            {
+                var blob = _container.GetBlobClient(_blobName);
+                var response = await blob.DownloadContentAsync();
+                return response.Value.Content.ToString();
+            }
+            catch (Exception ex)
+            {
+                // Blob not found, return empty content
+                return JsonSerializer.Serialize(_container) + " - " + JsonSerializer.Serialize(ex);
+            }
         }
 
         public async Task WriteAsync(string json)
