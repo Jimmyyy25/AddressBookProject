@@ -207,7 +207,7 @@ function App() {
     async function populateAddressBook() {
 
         try {
-            const responseData = await fetch(`${apiBaseUrl}/AddressBook/GetAll`);
+            const responseData = await apiFetch(`${apiBaseUrl}/AddressBook/GetAll`);
 
             setAddressBook(responseData.payload);
         }
@@ -221,7 +221,7 @@ function App() {
         const encodedEmail = encodeURIComponent(email);
 
         try {
-            const responseData = await fetch(`${apiBaseUrl}/AddressBook/GetByEmail?email=${encodedEmail}`);
+            const responseData = await apiFetch(`${apiBaseUrl}/AddressBook/GetByEmail?email=${encodedEmail}`);
             return responseData.payload;
         }
         catch (err) {
@@ -306,7 +306,7 @@ function App() {
         const encodedEmail = encodeURIComponent(email);
 
         try {
-            const response = await fetch(`${apiBaseUrl}/AddressBook/Delete/${encodedEmail}`, {
+            const response = await apiFetch(`${apiBaseUrl}/AddressBook/Delete/${encodedEmail}`, {
                 method: "DELETE"
             });
 
