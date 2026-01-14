@@ -26,11 +26,24 @@ builder.Services.AddControllers().AddJsonOptions(options =>
      options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
      options.JsonSerializerOptions.DictionaryKeyPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
  });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<IAddressBookService, AddressBookService>();
+
+var dataStore = builder.Configuration
+    .GetSection("Configuration:DataStore");
+
+if (dataStore.Value == "LocalFile")
+{
+    builder.Services.AddTransient<IAddressBookDataStore, LocalFileAddressBookDataStore>();
+}
+else
+{
+    builder.Services.AddTransient<IAddressBookDataStore, BlobAddressBookDataStore>();
+}
 
 // Configuration
 builder.Services.Configure<Configuration>(

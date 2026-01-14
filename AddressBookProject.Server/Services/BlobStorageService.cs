@@ -1,12 +1,13 @@
 ﻿using AddressBookProject.Server.Controllers;
 using AddressBookProject.Server.Core;
+using AddressBookProject.Server.Services.Interfaces;
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 
 namespace AddressBookProject.Server.Services
 {
-    public class BlobStorageService
+    public class BlobStorageService : IBlobStorageService
     {
         private readonly BlobContainerClient _container;
         private readonly string _blobName;
